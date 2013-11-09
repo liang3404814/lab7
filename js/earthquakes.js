@@ -65,20 +65,25 @@ function addQuakeMarkers(quakes, map) {
 				map: map,
 				position: new google.maps.LatLng(lat, lng)
 			});
+			
+			infoWindow = new google.maps.InfoWindow({
+				content: new Date(quake.datetime).toLocaleString() +
+				': magnitude ' + quake.magnitude + ' at depth of ' +
+				quake.depth + ' meters'
+			});
 
-			addInfoWindowForQuake(quake, map);
+			registerInfoWindow(map, quake.mapMarker, infoWindow);
+
+
+			//addInfoWindowForQuake(quake, map);
 		}
 	}
 }
 
-function addInfoWindowForQuake(quake, map) {
-	google.maps.event.addListener(quake.mapMarker, 'click', function() {
-		gov.usgs.iw = new google.maps.InfoWindow({
-			content: new Date(quake.datetime).toLocaleString() +
-			': magnitude ' + quake.magnitude + ' at depth of ' +
-			quake.depth + ' meters'
-		});
+function registerInfoWindow(map, marker, infoWindow) {
+	google.maps.event.addListener(marker, 'click', function(){
 
-		gov.usgs.iw.open(map, this);
-	});
-}
+		infoWindow.open(map, marker);
+
+	});                
+} //registerInfoWindow()
